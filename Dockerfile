@@ -8,6 +8,11 @@ RUN pip install --upgrade pip && \
 
 COPY main.py .
 
-EXPOSE 8002
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8002"]
+# Define environment variable for port (used by GCP)
+ENV PORT=8080
+
+# Run main.py when the container launches using uvicorn instead of gunicorn
+CMD exec uvicorn main:app --host 0.0.0.0 --port $PORT
